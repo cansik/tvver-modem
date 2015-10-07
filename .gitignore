@@ -1,2 +1,4 @@
 *.wav
 bin
+.idea
+*.iml
