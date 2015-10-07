@@ -1,2 +1,2 @@
-# tvver-modem
+# TVVER Modem
 Simple acoustic modem.
