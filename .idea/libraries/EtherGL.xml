@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="EtherGL">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/EtherGL.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <NATIVE>
+      <root url="jar://$PROJECT_DIR$/lib/EtherGL.jar!/" />
+    </NATIVE>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/EtherGL.jar!/" />
+    </SOURCES>
+  </library>
+</component>
