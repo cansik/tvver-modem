@@ -37,7 +37,7 @@ public class FastSuliSender extends AbstractSender {
         result.addAll(symbol(1f));
 		/* Send data bits. */
         for(int i = 0; i < 8; i++)
-            result.addAll(symbol((data & (1 << i)) == 0 ? 0 : 0.8f));
+            result.addAll(symbol((data & (1 << i)) == 0 ? 0 : 0.9f));
 
         return result.toSimpleArray();
     }

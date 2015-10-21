@@ -32,7 +32,7 @@ import ch.fhnw.util.ArrayUtilities;
 
 public class DTMFSender extends AbstractSender {
 	/** DTMF signal duration in seconds (including pause between two signals). */
-	private static final double DURATION = 0.5;
+	private static final double DURATION = 0.2;
 	private static final double PI2      = Math.PI * 2;
 
 	/** DTMF frequency table. Low frequency indicates row, high frequency for column. */

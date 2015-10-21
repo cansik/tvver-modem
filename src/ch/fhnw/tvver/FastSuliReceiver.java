@@ -1,5 +1,7 @@
 package ch.fhnw.tvver;
 
+import ch.fhnw.ether.audio.ButterworthFilter;
+
 import java.util.Arrays;
 
 /**
@@ -29,13 +31,13 @@ public class FastSuliReceiver extends AbstractReceiver {
      */
     private void process(float sample) {
         final int symbolSz = (int) (samplingFrequency / SimpleAMSender.FREQ);
-        symbolPhase        = symbolSz / 4;
+        symbolPhase = symbolSz / 4;
 
 		/* Wait for signal to rise above start threshold. */
         if(idle) {
             if(sample > START_THRESH) {
                 sampleIdx = symbolPhase;
-                idle     = false;
+                idle = false;
             }
         } else {
 			/* Accumulate energy */
@@ -49,11 +51,13 @@ public class FastSuliReceiver extends AbstractReceiver {
                 if(energyIdx == energy.length) {
 					/*  Collect bits. */
                     int val = 0;
-                    for(int i = 0; i < 8; i++)
+
+                  for(int i = 0; i < 8; i++)
 						/* Use first symbol as reference value */
-                        if(energy[i+1] > ONE_THRESH * energy[0])
-                            val |= 1 << i;
-                    addData((byte) val);
+                     if(energy[i+1] > ONE_THRESH * energy[0])
+                        val |= 1 << i;
+                   addData((byte) val);
+
 					/* Advance to next data byte */
                     energyIdx = 0;
                     sampleIdx = symbolPhase;
@@ -73,7 +77,10 @@ public class FastSuliReceiver extends AbstractReceiver {
      */
     @Override
     protected void process(float[] samples) {
-        for(int i = 0; i < samples.length; i++)
-            process(samples[i]*samples[i]);
+        //ButterworthFilter myfilter = ButterworthFilter.getLowpassFilter(samplingFrequency, SimpleAMSender.FREQ - 4);
+
+        for(int i = 0; i < samples.length; i++) {
+            process(samples[i] * samples[i]);
+        }
     }
 }
