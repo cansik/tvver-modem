@@ -72,7 +72,7 @@ public abstract class AbstractReceiver extends AbstractRenderCommand<IAudioRende
 	 * @return The recevied data.
 	 */
 	public final byte[] getAndClearData() {
-		byte[] result = data.toSimpleArray();
+		byte[] result = data.toArray();
 		data.clear();
 		return result;
 	}

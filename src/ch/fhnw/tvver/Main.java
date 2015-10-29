@@ -38,7 +38,7 @@ import ch.fhnw.ether.audio.FileAudioTarget;
 import ch.fhnw.ether.audio.IAudioRenderTarget;
 import ch.fhnw.ether.audio.JavaSoundTarget;
 import ch.fhnw.ether.audio.URLAudioSource;
-import ch.fhnw.ether.audio.WhiteNoise;
+import ch.fhnw.ether.audio.fx.WhiteNoise;
 import ch.fhnw.ether.audio.fx.AudioGain;
 import ch.fhnw.ether.audio.fx.BandPass;
 import ch.fhnw.ether.media.AbstractRenderCommand;
@@ -82,7 +82,8 @@ public class Main {
 		File   recvFile = new File(args[0] + "_recv.wav");
 
 		/* Create test data. */
-		byte[] sendData = createData();
+		//todo: put createData back
+		byte[] sendData = new byte[1]; //createData();
 		/* Send data (write it to sendFile). */
 		double duration = send(sendData, (AbstractSender)Class.forName(prefix + "Sender").newInstance(), sendFile);
 		/* Receive data (read it from sendFile). */
