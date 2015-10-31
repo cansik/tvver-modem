@@ -8,17 +8,11 @@ import ch.fhnw.util.FloatList;
 public class FastSuliSender extends AbstractSender {
     private static final double PI2  = Math.PI * 2;
 
-    /*
-    static final float S_00 = (float)(PI2 / 4 * 1);
-    static final float S_01 = (float)(PI2 / 4 * 2);
-    static final float S_10 = (float)(PI2 / 4 * 3);
-    static final float S_11 = (float)(PI2 / 4 * 4);
-    */
-
     static final float S_00 = (float)(Math.PI / 4);
     static final float S_01 = (float)(3*Math.PI / 4);
     static final float S_10 = (float)(-Math.PI / 4);
     static final float S_11 = (float)(-3*Math.PI / 4);
+
 
     /* Carrier frequency. */
     static final float  FREQ = 3000;
@@ -32,7 +26,9 @@ public class FastSuliSender extends AbstractSender {
         final float[] result = new float[symbolSz];
 
         for(int i = 0; i < result.length; i++)
+        {
             result[i] = (float)(Math.sin((PI2 * i) / symbolSz + transition));
+        }
 
         return result;
     }
@@ -50,6 +46,12 @@ public class FastSuliSender extends AbstractSender {
         result.addAll(symbol(S_01));
         result.addAll(symbol(S_10));
         result.addAll(symbol(S_11));
+
+        //sample data (a = 01100001)
+        result.addAll(symbol(S_01));
+        result.addAll(symbol(S_00));
+        result.addAll(symbol(S_10));
+        result.addAll(symbol(S_01));
 
 		/* Send data bits (two in one) */
         /*

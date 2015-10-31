@@ -64,7 +64,7 @@ public class Main {
 	/* Noise level */
 	final static float NOISE     = 0.15f;
 	/* Attenuation steps */
-	final static float GAINS[]   = {1.0f,.75f,.5f};
+	final static float GAINS[]   = {1.0f};
 
 	/**
 	 * Invoke test program.
@@ -171,7 +171,19 @@ public class Main {
 			target.start();
 			target.sleepUntil(IRenderTarget.NOT_RENDERING);
 			source.rewind(target);
-			
+
+			//my code
+			FastSuliReceiver sure = (FastSuliReceiver)recv;
+			float[] floatArray = new float[sure.floatList.size()];
+			int q = 0;
+
+			for (Float f : sure.floatList) {
+				floatArray[q++] = (f != null ? f : Float.NaN); // Or whatever default you want.
+			}
+
+			sure.plotSamples(floatArray);
+			//till here
+
 			result[i] = recv.getAndClearData();
 		}
 		target.stop();
