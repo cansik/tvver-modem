@@ -6,12 +6,19 @@ import ch.fhnw.util.FloatList;
  * Created by cansik on 14/10/15.
  */
 public class FastSuliSender extends AbstractSender {
-    private static final double PI2  = Math.PI * 2;
+    public static final double PI2  = Math.PI * 2;
 
-    static final float S_00 = (float)(Math.PI / 4);
-    static final float S_01 = (float)(3*Math.PI / 4);
-    static final float S_10 = (float)(-Math.PI / 4);
-    static final float S_11 = (float)(-3*Math.PI / 4);
+    public static final float S_00 = (float)(Math.PI / 4);
+    public static final float S_01 = (float)(3*Math.PI / 4);
+    public static final float S_10 = (float)(-Math.PI / 4);
+    public static final float S_11 = (float)(-3*Math.PI / 4);
+
+    static final float[] SYMBOLS = new float[] {
+            S_00,
+            S_01,
+            S_10,
+            S_11
+    };
 
     static boolean sendPreamble = true;
 
@@ -41,7 +48,6 @@ public class FastSuliSender extends AbstractSender {
     @Override
     public float[] synthesize(byte data) {
         FloatList result = new FloatList();
-
 		/* Send all possible values. */
 
         if(sendPreamble) {
@@ -63,40 +69,10 @@ public class FastSuliSender extends AbstractSender {
 
 		/* Send data bits (two in one) */
         for(int i = 0; i < 4; i++) {
-
-            /*
-            boolean firstBit = (data & (1 << i)) == 1;
-            boolean secondBit = (data & (1 << i+1)) == 1;
-
-            float nib = (float)Math.PI / 4;
-
-            if(firstBit)
-                nib *= 3;
-
-            if(secondBit)
-                nib *= -1;
-
-            result.addAll(symbol(1f, nib));
-            */
-
             int d = (data << (6-i*2)) & 0xFF;
             d >>= 6;
 
-            switch (d)
-            {
-                case 0:
-                    result.addAll(symbol(S_00));
-                    break;
-                case 1:
-                    result.addAll(symbol(S_01));
-                    break;
-                case 2:
-                    result.addAll(symbol(S_10));
-                    break;
-                case 3:
-                    result.addAll(symbol(S_11));
-                    break;
-            }
+            result.addAll(symbol(SYMBOLS[d]));
         }
 
         return result.toArray();

@@ -10,7 +10,7 @@ import java.util.*;
  */
 public class FastSuliReceiver extends AbstractReceiver {
     /* Experimental threshold for detecting start tone. Should be adaptive. */
-    private static final float START_THRESH = 0.2f;
+    private static float START_THRESH = 0.15f;
 
     // treshold which defines the maximal difference for a preamble to match
     private static final float PREAMBLE_THRESH = 4.5f;
@@ -30,14 +30,14 @@ public class FastSuliReceiver extends AbstractReceiver {
 
     public ArrayList<Float> floatList = new ArrayList<>();
 
+    int symbolSz = 0;
+
     /**
      * Process one sample (power).
      *
      * @param sample The sample to process.
      */
     private void process(float sample) {
-        final int symbolSz = (int) (samplingFrequency / SimpleAMSender.FREQ);
-
         //create preamble list first time (initialize)
         if(preambles.isEmpty())
         {
@@ -47,9 +47,9 @@ public class FastSuliReceiver extends AbstractReceiver {
             buffer = new float[symbolSz];
         }
 
-        //floatList.add(sample);
+        floatList.add(sample);
 
-        //wait for singal that is strong enough to be data
+        //wait for signal that is strong enough to be data
         if(idle) {
             if (Math.abs(sample) > START_THRESH) {
                 idle = false;
@@ -63,15 +63,15 @@ public class FastSuliReceiver extends AbstractReceiver {
             if (readPreamble) {
 
                 //read samples for symbol
-                floatList.add(sample);
+                //floatList.add(sample);
                 preambles.get(symbolCount)[sampleCount] = sample;
 
                 sampleCount++;
                 if (sampleCount == symbolSz) {
                     //new symbol read
                     symbolCount++;
-                    floatList.add(1f); //mark in plot
-                    System.out.println("Preamble Symbol: " + symbolCount);
+                    //floatList.add(1f); //mark in plot
+                    //System.out.println("Preamble Symbol: " + symbolCount);
                     sampleCount = 0;
 
                     if (symbolCount == 4) {
@@ -84,7 +84,7 @@ public class FastSuliReceiver extends AbstractReceiver {
             {
                 //read real data
 
-                //get 16 data and then compare with preambles
+                //get 16 samples and then compare with preambles
                 buffer[sampleCount] = sample;
 
                 sampleCount++;
@@ -97,11 +97,11 @@ public class FastSuliReceiver extends AbstractReceiver {
                     //compare with preambles
                     for(int i = 0; i < preambles.size(); i++)
                     {
-                        System.out.print("Symbol " + symbolCount + " | " + i + ": ");
+                        //System.out.print("Symbol " + symbolCount + " | " + i + ": ");
                         float diff = calculateDifference(buffer, preambles.get(i));
-                        System.out.println(diff);
+                        //System.out.println(diff);
 
-                        if(diff < minDiff)
+                        if(diff < minDiff + (minDiff * START_THRESH / 2))
                         {
                             bestPreamble = i;
                             minDiff = diff;
@@ -114,12 +114,13 @@ public class FastSuliReceiver extends AbstractReceiver {
                         //no preamble detected
                         idle = true;
                         symbolCount = 0;
+                        readPreamble = true;
 
-                        System.out.println("Preamble difference was to big: " + minDiff);
+                        //System.out.println("Preamble difference was to big: " + minDiff);
                     }
                     else
                     {
-                        System.out.println("best preamble was: " + bestPreamble);
+                        //System.out.println("best preamble was: " + bestPreamble);
 
                         //add data to result
                         dataBuffer |= bestPreamble << ((symbolCount - 1) * 2);
@@ -127,7 +128,7 @@ public class FastSuliReceiver extends AbstractReceiver {
                         //go to the next data
                         if(symbolCount == 4)
                         {
-                            System.out.println("received: " + (char)dataBuffer);
+                            //System.out.println("received: " + (char)dataBuffer);
 
                             //add dataBuffer to final result
                             addData((byte)dataBuffer);
@@ -163,9 +164,26 @@ public class FastSuliReceiver extends AbstractReceiver {
      */
     @Override
     protected void process(float[] samples) {
-        //ButterworthFilter myfilter = ButterworthFilter.getLowpassFilter(samplingFrequency, SimpleAMSender.FREQ - 4);
+
+        symbolSz = (int) (samplingFrequency / SimpleAMSender.FREQ);
+        float maxAmplitude = Float.MIN_VALUE;
+
         for (int i = 0; i < samples.length; i++) {
-            process(samples[i]);
+            maxAmplitude = Math.max(Math.abs(samples[i]), maxAmplitude);
+        }
+
+        //System.out.println("Max: " +  maxAmplitude);
+
+        //only process if there's not only noise
+        if(maxAmplitude > 0.1) {
+
+            //Take max as amplitude point and start at this amplitude to track!
+            float startPoint = (float)(Math.sin((FastSuliSender.PI2 * 0) / symbolSz + FastSuliSender.S_00) * maxAmplitude);
+            START_THRESH = startPoint * 0.6f;
+
+            for (int i = 0; i < samples.length; i++) {
+                process(samples[i]);
+            }
         }
     }
 

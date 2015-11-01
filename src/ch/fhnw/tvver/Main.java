@@ -64,7 +64,7 @@ public class Main {
 	/* Noise level */
 	final static float NOISE     = 0.15f;
 	/* Attenuation steps */
-	final static float GAINS[]   = {1.0f};
+	final static float GAINS[]   = {1.0f, 0.75f, 0.5f};
 
 	/**
 	 * Invoke test program.
@@ -278,7 +278,7 @@ public class Main {
 			return result;
 		}
 		case TEXT:
-			return "aTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG - the quick brown fox jumps over the lazy dog\n".getBytes();
+			return "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG - the quick brown fox jumps over the lazy dog\n".getBytes();
 		default:
 			return ClassUtilities.EMPTY_byteA;
 		}
