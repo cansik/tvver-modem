@@ -83,7 +83,7 @@ public class Main {
 
 		/* Create test data. */
 		//todo: put createData back
-		byte[] sendData = new byte[1]; //createData();
+		byte[] sendData = createData();
 		/* Send data (write it to sendFile). */
 		double duration = send(sendData, (AbstractSender)Class.forName(prefix + "Sender").newInstance(), sendFile);
 		/* Receive data (read it from sendFile). */
@@ -202,10 +202,9 @@ public class Main {
 		if(recvData == null || recvData.length == 0)
 			System.out.println("Grade: 1.0 (no data received)");
 		else {
-			/*
 			for(byte[] rData : recvData)
 				dump(sendData, rData);
-			*/
+
 
 			int errors = 0;
 			for(int j = 0; j < recvData.length; j++) {
@@ -279,7 +278,7 @@ public class Main {
 			return result;
 		}
 		case TEXT:
-			return "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG - the quick brown fox jumps over the lazy dog\n".getBytes();
+			return "aTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG - the quick brown fox jumps over the lazy dog\n".getBytes();
 		default:
 			return ClassUtilities.EMPTY_byteA;
 		}

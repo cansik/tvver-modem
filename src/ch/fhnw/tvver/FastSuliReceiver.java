@@ -13,7 +13,7 @@ public class FastSuliReceiver extends AbstractReceiver {
     private static final float START_THRESH = 0.2f;
 
     // treshold which defines the maximal difference for a preamble to match
-    private static final float PREAMBLE_THRESH = 4.0f;
+    private static final float PREAMBLE_THRESH = 4.5f;
 
     /* Idle / data state */
     private boolean idle = true;

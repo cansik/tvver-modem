@@ -13,6 +13,7 @@ public class FastSuliSender extends AbstractSender {
     static final float S_10 = (float)(-Math.PI / 4);
     static final float S_11 = (float)(-3*Math.PI / 4);
 
+    static boolean sendPreamble = true;
 
     /* Carrier frequency. */
     static final float  FREQ = 3000;
@@ -42,21 +43,28 @@ public class FastSuliSender extends AbstractSender {
         FloatList result = new FloatList();
 
 		/* Send all possible values. */
-        result.addAll(symbol(S_00));
-        result.addAll(symbol(S_01));
-        result.addAll(symbol(S_10));
-        result.addAll(symbol(S_11));
+
+        if(sendPreamble) {
+            result.addAll(symbol(S_00));
+            result.addAll(symbol(S_01));
+            result.addAll(symbol(S_10));
+            result.addAll(symbol(S_11));
+            sendPreamble = false;
+        }
+
 
         //sample data (a = 01100001)
+        /*
         result.addAll(symbol(S_01));
         result.addAll(symbol(S_00));
         result.addAll(symbol(S_10));
         result.addAll(symbol(S_01));
+        */
 
 		/* Send data bits (two in one) */
-        /*
         for(int i = 0; i < 4; i++) {
 
+            /*
             boolean firstBit = (data & (1 << i)) == 1;
             boolean secondBit = (data & (1 << i+1)) == 1;
 
@@ -69,8 +77,27 @@ public class FastSuliSender extends AbstractSender {
                 nib *= -1;
 
             result.addAll(symbol(1f, nib));
+            */
+
+            int d = (data << (6-i*2)) & 0xFF;
+            d >>= 6;
+
+            switch (d)
+            {
+                case 0:
+                    result.addAll(symbol(S_00));
+                    break;
+                case 1:
+                    result.addAll(symbol(S_01));
+                    break;
+                case 2:
+                    result.addAll(symbol(S_10));
+                    break;
+                case 3:
+                    result.addAll(symbol(S_11));
+                    break;
+            }
         }
-        */
 
         return result.toArray();
     }
