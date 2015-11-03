@@ -45,7 +45,7 @@ import ch.fhnw.util.ByteList;
  */
 public abstract class AbstractReceiver extends AbstractRenderCommand<IAudioRenderTarget,Stateless<IAudioRenderTarget>> {
 	/** Received data. */
-	private final ByteList                                          data = new ByteList();
+	public final ByteList data = new ByteList();
 	/** Additional filters etc. to add to the audio pipeline. */
 	private final List<AbstractRenderCommand<IAudioRenderTarget,?>> cmds = new ArrayList<>();
 	/** The sampling frequency */
@@ -71,7 +71,7 @@ public abstract class AbstractReceiver extends AbstractRenderCommand<IAudioRende
 	 * Call for the test program to pull the received data.
 	 * @return The recevied data.
 	 */
-	public final byte[] getAndClearData() {
+	public byte[] getAndClearData() {
 		byte[] result = data.toArray();
 		data.clear();
 		return result;

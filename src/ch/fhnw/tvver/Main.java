@@ -159,8 +159,8 @@ public class Main {
 		for(AbstractRenderCommand<IAudioRenderTarget,?> cmd : recv.getCmds())
 			program.addLast(cmd);
 		program.addLast(recv);
-		
-		// IAudioRenderTarget target = new FileAudioTarget(recvFile, source.getNumChannels(), source.getSampleRate());
+
+		IAudioRenderTarget target2 = new FileAudioTarget(recvFile, source.getNumChannels(), source.getSampleRate());
 		IAudioRenderTarget target = new JavaSoundTarget();
 		target.useProgram(program);
 		
@@ -173,6 +173,7 @@ public class Main {
 			source.rewind(target);
 
 			//my code
+			/*
 			FastSuliReceiver sure = (FastSuliReceiver)recv;
 			float[] floatArray = new float[sure.floatList.size()];
 			int q = 0;
@@ -182,8 +183,9 @@ public class Main {
 			}
 
 			sure.plotSamples(floatArray);
-			//till here
 
+			//till here
+			*/
 			result[i] = recv.getAndClearData();
 		}
 		target.stop();
@@ -278,7 +280,7 @@ public class Main {
 			return result;
 		}
 		case TEXT:
-			return "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG - the quick brown fox jumps over the lazy dog\n".getBytes();
+			return new byte[]{(byte) 228}; // "aTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG - the quick brown fox jumps over the lazy dog\n".getBytes();
 		default:
 			return ClassUtilities.EMPTY_byteA;
 		}

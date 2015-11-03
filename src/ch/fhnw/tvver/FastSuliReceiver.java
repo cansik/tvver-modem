@@ -101,7 +101,7 @@ public class FastSuliReceiver extends AbstractReceiver {
                         float diff = calculateDifference(buffer, preambles.get(i));
                         //System.out.println(diff);
 
-                        if(diff < minDiff + (minDiff * START_THRESH / 2))
+                        if (diff < minDiff)
                         {
                             bestPreamble = i;
                             minDiff = diff;
@@ -115,6 +115,7 @@ public class FastSuliReceiver extends AbstractReceiver {
                         idle = true;
                         symbolCount = 0;
                         readPreamble = true;
+                        dataBuffer = 0;
 
                         //System.out.println("Preamble difference was to big: " + minDiff);
                     }
@@ -184,10 +185,13 @@ public class FastSuliReceiver extends AbstractReceiver {
             for (int i = 0; i < samples.length; i++) {
                 process(samples[i]);
             }
+        } else {
+            for (int i = 0; i < 128; i++)
+                process(0.0f);
         }
     }
 
-    public void plotSamples(float[] samples)
+    public static void plotSamples(float[] samples)
     {
         StringBuilder b = new StringBuilder();
         for(int i = 0; i < samples.length; i++) {
