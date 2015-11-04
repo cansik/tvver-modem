@@ -191,7 +191,7 @@ public class FastSuliReceiver extends AbstractReceiver {
         }
     }
 
-    public static void plotSamples(float[] samples)
+    public static void plotSamples(String name, float[] samples)
     {
         StringBuilder b = new StringBuilder();
         for(int i = 0; i < samples.length; i++) {
@@ -200,7 +200,7 @@ public class FastSuliReceiver extends AbstractReceiver {
 
         PrintWriter out = null;
         try {
-            out = new PrintWriter(new FileOutputStream("plot.data", false));
+            out = new PrintWriter(new FileOutputStream(name, false));
             out.println(b.toString());
             out.close();
         } catch (FileNotFoundException e) {

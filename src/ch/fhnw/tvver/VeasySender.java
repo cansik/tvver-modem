@@ -45,15 +45,14 @@ public class VeasySender extends AbstractSender {
             double Fc = FREQ;
             double t = i / Fc;
 
-
-            /*
-            double Ci = Ac * Math.sin(PI2 * Fc * t);
-            double Cq = Ac * Math.sin(PI2 * Fc * t);
+            double Ci = Ac * Math.cos(PI2 * Fc * i);
+            double Cq = Ac * Math.cos(PI2 * Fc * i + Math.PI / 2f);
+            //Math.sin(PI2 * Fc * i);
 
             double Sqpsk = Pi * Ci + Pq * Cq;
 
-            result[i] = (float)Ci;
-            */
+            result[i] = (float) Sqpsk;
+
 
             result[i] = (float) (Math.cos((PI2 * i) / Ts + (2f * n - 1f) * Math.PI / 4f));
         }
