@@ -30,7 +30,7 @@ public class FastSuliReceiver extends AbstractReceiver {
 
     private int dataBuffer = 0;
 
-    private static int CompareOffset = 4;
+    private static int CompareOffset = 3;
 
     public ArrayList<Float> floatList = new ArrayList<>();
 
