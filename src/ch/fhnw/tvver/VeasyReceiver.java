@@ -96,15 +96,17 @@ public class VeasyReceiver extends AbstractReceiver {
         return sum;
     }
 
-    protected float generateCarrierWave(int time, int pole) {
-        double Ac = VeasySender.AMP;
+    /*protected float generateCarrierWave(int time) {
+        double Ac = AMP/2f;
         double Ts = symbolSize;
-        double Fc = VeasySender.FREQ;
-        double t = time / Fc;
+        double Fc = FREQ;
+        double t = i / samplingFrequency;
 
+        double Ci = Ac * Math.cos(PI2 * Fc * t);
+        double Cq = Ac * Math.sin(PI2 * Fc * t);
 
-        return (float) (pole * (Math.cos((VeasySender.PI2 * time) / Ts)));
-    }
+        return Ci + Cq;
+    }*/
 
     @Override
     public final byte[] getAndClearData() {

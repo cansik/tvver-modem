@@ -40,14 +40,13 @@ public class VeasySender extends AbstractSender {
         final float[] result = new float[symbolSize];
 
         for (int i = 0; i < result.length; i++) {
-            double Ac = AMP;
+            double Ac = AMP / 2f;
             double Ts = symbolSize;
             double Fc = FREQ;
-            double t = i / Fc;
+            double t = i / samplingFrequency;
 
-            double Ci = Ac * Math.cos(PI2 * Fc * i);
-            double Cq = Ac * Math.cos(PI2 * Fc * i + Math.PI / 2f);
-            //Math.sin(PI2 * Fc * i);
+            double Ci = Ac * Math.cos(PI2 * Fc * t);
+            double Cq = Ac * Math.sin(PI2 * Fc * t);
 
             double Sqpsk = Pi * Ci + Pq * Cq;
 

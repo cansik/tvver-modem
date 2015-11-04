@@ -30,7 +30,7 @@ public class FastSuliReceiver extends AbstractReceiver {
 
     private int dataBuffer = 0;
 
-    private static int CompareOffset = 2;
+    private static int CompareOffset = 4;
 
     public ArrayList<Float> floatList = new ArrayList<>();
 
@@ -78,7 +78,7 @@ public class FastSuliReceiver extends AbstractReceiver {
                     //new symbol read
                     symbolCount++;
                     //floatList.add(1f); //mark in plot
-                    System.out.println("Preamble Symbol: " + symbolCount);
+                    //System.out.println("Preamble Symbol: " + symbolCount);
                     sampleCount = 0;
 
                     if (symbolCount == 4) {
@@ -86,6 +86,7 @@ public class FastSuliReceiver extends AbstractReceiver {
                         readPreamble = false;
 
                         PREAMBLE_THRESH -= 0.2f / preambles.get(0)[0];
+                        System.out.println("Preamble Thresh: " + PREAMBLE_THRESH);
                     }
                 }
             }
@@ -193,7 +194,7 @@ public class FastSuliReceiver extends AbstractReceiver {
             float startPoint = (float)(Math.sin((FastSuliSender.PI2 * 0) / symbolSz + FastSuliSender.S_00) * maxAmplitude);
             START_THRESH = startPoint * 0.6f;
 
-            System.out.println("test");
+            System.out.println("Start Thresh: " + START_THRESH);
 
             for (int i = 0; i < samples.length; i++) {
                 process(samples[i]);
