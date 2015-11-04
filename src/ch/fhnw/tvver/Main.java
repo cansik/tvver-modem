@@ -280,7 +280,7 @@ public class Main {
 			return result;
 		}
 		case TEXT:
-			return new byte[]{(byte) 228}; // "aTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG - the quick brown fox jumps over the lazy dog\n".getBytes();
+			return "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG - the quick brown fox jumps over the lazy dog\n".getBytes();
 		default:
 			return ClassUtilities.EMPTY_byteA;
 		}

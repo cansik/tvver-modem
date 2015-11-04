@@ -54,7 +54,7 @@ public class VeasySender extends AbstractSender {
             result[i] = (float) Sqpsk;
 
 
-            result[i] = (float) (Math.cos((PI2 * i) / Ts + (2f * n - 1f) * Math.PI / 4f));
+            //result[i] = (float) (Math.cos((PI2 * i) / Ts + (2f * n - 1f) * Math.PI / 4f));
         }
 
         return result;

@@ -2,6 +2,8 @@ package ch.fhnw.tvver;
 
 import ch.fhnw.util.FloatList;
 
+import java.io.File;
+
 import static ch.fhnw.tvver.FastSuliReceiver.plotSamples;
 
 /**
@@ -10,6 +12,8 @@ import static ch.fhnw.tvver.FastSuliReceiver.plotSamples;
 public class VeasyReceiver extends AbstractReceiver {
     public FloatList list = new FloatList();
     public FloatList list2 = new FloatList();
+    public FloatList list3 = new FloatList();
+    public FloatList list4 = new FloatList();
 
     public static final float THRESHOLD = 0.3f;
 
@@ -23,8 +27,13 @@ public class VeasyReceiver extends AbstractReceiver {
 
     void process_sample(float sample) {
         //modulate by positive and negative carrier wave
-        iBuffer[time % symbolSize] = sample * (float) Math.cos((VeasySender.PI2 * (float) time) / symbolSize); //(float)Math.cos(VeasySender.PI2 * VeasySender.FREQ * (float)time);
-        qBuffer[time % symbolSize] = sample * (float) Math.sin((VeasySender.PI2 * (float) time) / symbolSize); //(float)Math.cos(VeasySender.PI2 * VeasySender.FREQ * (float)time + Math.PI / 2f);
+        iBuffer[time % symbolSize] = sample * (float) Math.cos(VeasySender.PI2 * VeasySender.FREQ * time);
+        qBuffer[time % symbolSize] = sample * -(float) Math.cos(VeasySender.PI2 * VeasySender.FREQ * time + Math.PI / 2f);
+
+        //list.add(iBuffer[time % symbolSize]);
+        //list2.add(qBuffer[time % symbolSize]);
+        //list3.add();
+        //list4.add();
     }
 
     void make_desicion() {
@@ -50,13 +59,13 @@ public class VeasyReceiver extends AbstractReceiver {
             System.out.println("I: " + setI + "\t|\tQ: " + setQ + "\t|\tbit: " + bit);
         }
 
-        list.add(setI);
-        list2.add(setQ);
+        //list.add(setI);
+        //list2.add(setQ);
     }
 
     @Override
     protected void process(float[] samples) {
-        //list.addAll(samples);
+        list.addAll(samples);
 
         symbolSize = (int) (samplingFrequency / VeasySender.FREQ);
 
@@ -72,7 +81,7 @@ public class VeasyReceiver extends AbstractReceiver {
             //update time
             time++;
 
-            //check if symbolisize is big enough
+            //check if symbolesize is big enough
             if (time % symbolSize == 0) {
                 make_desicion();
             }
@@ -100,9 +109,22 @@ public class VeasyReceiver extends AbstractReceiver {
     @Override
     public final byte[] getAndClearData() {
         byte[] result = data.toArray();
-        plotSamples("plot.data", list.toArray());
-        plotSamples("plot2.data", list2.toArray());
+        cleanupPlots();
+        plotSamples("plot1.data", list.toArray());
+        //plotSamples("plot2.data", list2.toArray());
+        //plotSamples("plot3.data", list3.toArray());
+        //plotSamples("plot4.data", list4.toArray());
         data.clear();
         return result;
+    }
+
+    public static void cleanupPlots() {
+        File folder = new File(".");
+        File[] listOfFiles = folder.listFiles();
+        for (File f : listOfFiles) {
+            if (f.getName().matches("plot\\d+\\.data")) {
+                System.out.println("deleting " + f.getName() + ": " + f.delete());
+            }
+        }
     }
 }

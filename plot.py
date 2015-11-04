@@ -1,5 +1,7 @@
 import os
 import matplotlib.pyplot as plt
+from matplotlib import colors
+
 
 def readData(filename):
     with open('/Users/cansik/git/fhnw/tvvr/tvver-modem/' + filename) as f:
@@ -14,16 +16,20 @@ def readData(filename):
         return xv,yv
 
 
-xv1, yv1 = readData('plot.data')
-plt.plot(xv1, yv1, 'b.-')
+graph_colors = ['b', 'r', 'g', 'k', 'm']
 
-if(os.path.exists('plot2.data')):
-    xv2, yv2 = readData('plot2.data')
-    plt.plot(xv2, yv2, 'r.-')
+maxY = 0
+i = 1;
+while(os.path.exists('plot%s.data' % i)):
+    xv, yv = readData('plot%s.data' % i)
+    maxY = len(yv)
+    plt.plot(xv, yv, 'b.-', label='Plot %s' % i, color=graph_colors[i-1])
+    i += 1
 
-plt.ylim([-1,1])
-plt.xlim([0,len(yv1)])
+plt.ylim([-1.2,1.2])
+plt.xlim([0,maxY])
 plt.ylabel('amplitude')
 plt.xlabel('time')
+plt.legend(loc='best')
 plt.grid()
 plt.show()
