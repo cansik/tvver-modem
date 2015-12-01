@@ -54,7 +54,7 @@ public class FastSuliReceiver extends AbstractReceiver {
             buffer = new float[symbolSz];
         }
 
-        floatList.add(sample);
+        //floatList.add(sample);
 
         //wait for signal that is strong enough to be data
         if(idle) {
@@ -86,7 +86,7 @@ public class FastSuliReceiver extends AbstractReceiver {
                         readPreamble = false;
 
                         PREAMBLE_THRESH -= 0.2f / preambles.get(0)[0];
-                        System.out.println("Preamble Thresh: " + PREAMBLE_THRESH);
+                        //System.out.println("Preamble Thresh: " + PREAMBLE_THRESH);
                     }
                 }
             }
@@ -107,9 +107,9 @@ public class FastSuliReceiver extends AbstractReceiver {
                     //compare with preambles
                     for(int i = 0; i < preambles.size(); i++)
                     {
-                        System.out.print("Symbol " + symbolCount + " | " + i + ": ");
+                        //System.out.print("Symbol " + symbolCount + " | " + i + ": ");
                         float diff = calculateDifference(buffer, preambles.get(i));
-                        System.out.println(diff);
+                        //System.out.println(diff);
 
                         if (diff < minDiff)
                         {
@@ -127,11 +127,11 @@ public class FastSuliReceiver extends AbstractReceiver {
                         readPreamble = true;
                         dataBuffer = 0;
 
-                        System.out.println("Preamble difference was to big: " + minDiff);
+                        //System.out.println("Preamble difference was to big: " + minDiff);
                     }
                     else
                     {
-                        System.out.println("best preamble was: " + bestPreamble);
+                        //System.out.println("best preamble was: " + bestPreamble);
 
                         //add data to result
                         dataBuffer |= bestPreamble << ((symbolCount - 1) * 2);
@@ -139,7 +139,7 @@ public class FastSuliReceiver extends AbstractReceiver {
                         //go to the next data
                         if(symbolCount == 4)
                         {
-                            System.out.println("received: " + (char) dataBuffer);
+                            //System.out.println("received: " + (char) dataBuffer);
 
                             //add dataBuffer to final result
                             addData((byte)dataBuffer);
@@ -194,7 +194,7 @@ public class FastSuliReceiver extends AbstractReceiver {
             float startPoint = (float)(Math.sin((FastSuliSender.PI2 * 0) / symbolSz + FastSuliSender.S_00) * maxAmplitude);
             START_THRESH = startPoint * 0.6f;
 
-            System.out.println("Start Thresh: " + START_THRESH);
+            //System.out.println("Start Thresh: " + START_THRESH);
 
             for (int i = 0; i < samples.length; i++) {
                 process(samples[i]);
@@ -202,35 +202,6 @@ public class FastSuliReceiver extends AbstractReceiver {
         } else {
             for (int i = 0; i < 128; i++)
                 process(0.0f);
-        }
-    }
-
-    @Override
-    public final byte[] getAndClearData() {
-        byte[] result = data.toArray();
-        VeasyReceiver.cleanupPlots();
-        plotSamples("plot1.data", list.toArray());
-        //plotSamples("plot2.data", list2.toArray());
-        //plotSamples("plot3.data", list3.toArray());
-        //plotSamples("plot4.data", list4.toArray());
-        data.clear();
-        return result;
-    }
-
-    public static void plotSamples(String name, float[] samples)
-    {
-        StringBuilder b = new StringBuilder();
-        for(int i = 0; i < samples.length; i++) {
-            b.append(i + "," + (samples[i])+"\n");
-        }
-
-        PrintWriter out = null;
-        try {
-            out = new PrintWriter(new FileOutputStream(name, false));
-            out.println(b.toString());
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
     }
 }

@@ -4,7 +4,7 @@ import ch.fhnw.util.FloatList;
 
 import java.io.File;
 
-import static ch.fhnw.tvver.FastSuliReceiver.plotSamples;
+//import static ch.fhnw.tvver.FastSuliReceiver.plotSamples;
 
 /**
  * Created by cansik on 03/11/15.
@@ -108,6 +108,7 @@ public class VeasyReceiver extends AbstractReceiver {
         return Ci + Cq;
     }*/
 
+    /*
     @Override
     public final byte[] getAndClearData() {
         byte[] result = data.toArray();
@@ -129,4 +130,5 @@ public class VeasyReceiver extends AbstractReceiver {
             }
         }
     }
+    */
 }
